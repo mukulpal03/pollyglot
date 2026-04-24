@@ -12,7 +12,8 @@
   "packageManager": "pnpm@10.12.1",
   "dependencies": {
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "openai": "^6.34.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
