@@ -16,7 +16,8 @@ export const translateUserMessageService = async (
       max_output_tokens: 300,
     });
 
-    return response.output_text;
+    const translatedText = response.output_text || "";
+    return translatedText.replace(/^"|"$/g, "");
   } catch (error) {
     console.error(error);
     throw error;
