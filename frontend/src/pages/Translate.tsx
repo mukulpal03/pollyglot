@@ -1,17 +1,21 @@
 import { useState } from "react";
-import { Copy, Volume2, Share2 } from "lucide-react";
+import { Copy, Volume2, Share2, AlertCircle } from "lucide-react";
+import { useTranslate } from "../hooks/useTranslate";
 import { TranslateBackground } from "../components/translate/TranslateBackground";
 import { TranslateHeader } from "../components/translate/TranslateHeader";
 import { TranslateBox } from "../components/translate/TranslateBox";
 import { LanguageSelector } from "../components/ui/LanguageSelector";
 import { SwapButton } from "../components/ui/SwapButton";
-import { TranslateActionButton } from "../components/ui/TranslateActionButton";
 
 export const Translate = () => {
   const [inputText, setInputText] = useState("");
   const [sourceLang, setSourceLang] = useState("en");
   const [targetLang, setTargetLang] = useState("es");
   const [isFocused, setIsFocused] = useState(false);
+  const { translatedText, isLoading, error } = useTranslate(
+    inputText,
+    targetLang,
+  );
 
   const swapLanguages = () => {
     setSourceLang(targetLang);
@@ -92,11 +96,23 @@ export const Translate = () => {
                 </div>
               }
             >
-              <div className="w-full h-full p-4 md:p-6 text-sm md:text-xl text-slate-400 select-all overflow-auto min-h-0">
-                {inputText ? (
-                  <span className="text-white animate-in fade-in duration-500">
-                    Translation will appear here...
+              <div className="w-full h-full p-4 md:p-6 text-sm md:text-xl select-all overflow-auto min-h-0">
+                {isLoading ? (
+                  <div className="flex flex-col gap-2 animate-pulse">
+                    <div className="h-4 md:h-6 bg-slate-800 rounded-md w-3/4" />
+                    <div className="h-4 md:h-6 bg-slate-800 rounded-md w-1/2" />
+                  </div>
+                ) : error ? (
+                  <div className="flex items-center gap-2 text-rose-500 text-sm md:text-base bg-rose-500/10 p-3 rounded-xl border border-rose-500/20">
+                    <AlertCircle size={18} />
+                    <span>{error}</span>
+                  </div>
+                ) : translatedText ? (
+                  <span className="text-white animate-in fade-in duration-500 whitespace-pre-wrap">
+                    {translatedText}
                   </span>
+                ) : inputText ? (
+                  <span className="text-slate-600 italic">Translating...</span>
                 ) : (
                   <span className="text-slate-700 italic">Translation...</span>
                 )}
@@ -105,9 +121,7 @@ export const Translate = () => {
           </div>
         </div>
 
-        <div className="py-4 shrink-0">
-          <TranslateActionButton />
-        </div>
+
       </div>
     </div>
   );
